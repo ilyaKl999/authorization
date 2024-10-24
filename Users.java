@@ -184,5 +184,7 @@ class AuthorizationClass {
         SimpleLogger.log("Очистка коллекции пользователей");
         users.clear();
         SimpleLogger.log("Коллекция пользователей очищена");
+        saveUsers(users);
+        SimpleLogger.log("Колличество объектов = " + users.size());
     }
 }
