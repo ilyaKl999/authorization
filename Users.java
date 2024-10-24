@@ -113,22 +113,20 @@ class AuthorizationClass {
 
 
     // Метод для проверки наличия файла и создания пустой коллекции, если файла нет
-    static boolean checkArrayList() {
-        SimpleLogger.log("Проверка файла на его наличие в директории");
+    static void checkArrayList() {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
             SimpleLogger.log("Файл не существует, создание пустой коллекции");
             ArrayList<Users> emptyUsers = new ArrayList<>();
             saveUsers(emptyUsers);
-            return false;
+        } else {
+            SimpleLogger.log("Файл по указаному адресу существует");
         }
-        return true;
     }
 
 
     // Метод для сохранения коллекции пользователей в файл
     public static void saveUsers(ArrayList<Users> users) {
-        SimpleLogger.log("Сохранение коллекции в файл");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             oos.writeObject(users);
             SimpleLogger.log("Коллекция пользователей сохранена в файл: " + FILE_PATH);
@@ -140,7 +138,7 @@ class AuthorizationClass {
 
     // Метод для загрузки коллекции пользователей из файла
     public static ArrayList<Users> loadUsers() {
-        SimpleLogger.log("Загрузка коллекции из файла");
+        checkArrayList();
         ArrayList<Users> users = new ArrayList<>();
         File file = new File(FILE_PATH);
         if (file.exists()) {
@@ -168,7 +166,6 @@ class AuthorizationClass {
 
     // Метод для поиска пользователя в коллекции по имени и паролю
     public static Users findUser(ArrayList<Users> users, String name, String password) {
-        SimpleLogger.log("Поиск пользователя в коллекции");
         for (Users user : users) {
             if (user.getName().equals(name) && user.getPassword().equals(password)) {
                 SimpleLogger.log("Пользователь найден: ID = %d, Name = %s", user.getID(), user.getName());
@@ -181,10 +178,8 @@ class AuthorizationClass {
 
     //Метод, который очищает коллекцию пользователей
     public static void clearUsers(ArrayList<Users> users) {
-        SimpleLogger.log("Очистка коллекции пользователей");
         users.clear();
-        SimpleLogger.log("Коллекция пользователей очищена");
         saveUsers(users);
-        SimpleLogger.log("Колличество объектов = " + users.size());
+        SimpleLogger.log("Коллекция пользователей очищена. Колличество объектов = " + users.size());
     }
 }
