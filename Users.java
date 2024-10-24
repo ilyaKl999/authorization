@@ -176,4 +176,11 @@ class AuthorizationClass {
         SimpleLogger.log("Пользователь не найден");
         return null;
     }
+
+    //Метод, который очищает коллекцию пользователей
+    public static void clearUsers(ArrayList<Users> users) {
+        SimpleLogger.log("Очистка коллекции пользователей");
+        users.clear();
+        SimpleLogger.log("Коллекция пользователей очищена");
+    }
 }
