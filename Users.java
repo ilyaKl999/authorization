@@ -1,3 +1,5 @@
+package com.example.chats.controllers;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -109,9 +111,9 @@ class AuthorizationClass {
 
 
     // Метод для проверки наличия файла и создания пустой коллекции, если файла нет
-    static boolean checkArrayList(String filePath) {
+    static boolean checkArrayList() {
         SimpleLogger.log("Проверка файла на его наличие в директории");
-        File file = new File(filePath);
+        File file = new File(FILE_PATH);
         if (!file.exists()) {
             SimpleLogger.log("Файл не существует, создание пустой коллекции");
             ArrayList<Users> emptyUsers = new ArrayList<>();
@@ -127,7 +129,7 @@ class AuthorizationClass {
         SimpleLogger.log("Сохранение коллекции в файл");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             oos.writeObject(users);
-            System.out.println("Коллекция пользователей сохранена в файл: " + FILE_PATH);
+            SimpleLogger.log("Коллекция пользователей сохранена в файл: " + FILE_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -142,12 +144,12 @@ class AuthorizationClass {
         if (file.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
                 users = (ArrayList<Users>) ois.readObject();
-                System.out.println("Коллекция пользователей загружена из файла: " + FILE_PATH);
+                SimpleLogger.log("Коллекция пользователей загружена из файла: " + FILE_PATH + "Колличество объектов:" + users.size() );
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Файл не существует: " + FILE_PATH);
+            SimpleLogger.log("Файл не существует: " + FILE_PATH);
         }
         return users;
     }
@@ -157,6 +159,7 @@ class AuthorizationClass {
     public static void addUser(ArrayList<Users> users, long id, String name, String password) {
         Users newUser = new Users(id, name, password);
         users.add(newUser);
+        saveUsers(users);
         SimpleLogger.log("Пользователь добавлен: ID = %d, Name = %s", id, name);
     }
 
